@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
 public class MainMenu : MonoBehaviour
 {
     public void PlayGame()
     {
-    SceneManager. LoadSceneAsync (1) ;
+        int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        Debug.Log("Loading next scene: " + nextSceneIndex);
+        SceneManager.LoadSceneAsync(nextSceneIndex);
     }
 
     public void QuitGame()
     {
-    Application. Quit( ) ;
+        Debug.Log("Quitting game...");
+        Application.Quit();
     }
 }
