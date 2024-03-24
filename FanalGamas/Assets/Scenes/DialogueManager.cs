@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class DialogueManager : MonoBehaviour
@@ -40,8 +41,17 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    public void EndDialogue()
-    {
-        dialogueSentenceText.text = "Dialogue Ended";
-    }
+public void EndDialogue()
+{
+    dialogueSentenceText.text = "Dialogue Ended";
+    // Invoke("DIALOGUE", 1f); // Delay the execution of PlayGame() by 1 second
+}
+
+
+    // public void DIALOGUE()
+    // {
+    //     int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+    //     Debug.Log("Loading next scene: " + nextSceneIndex);
+    //     SceneManager.LoadSceneAsync(nextSceneIndex);
+    // }
 }
