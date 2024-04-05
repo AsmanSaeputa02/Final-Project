@@ -44,14 +44,6 @@ public class DialogueManager : MonoBehaviour
 public void EndDialogue()
 {
     dialogueSentenceText.text = "Dialogue Ended";
-    // Invoke("DIALOGUE", 1f); // Delay the execution of PlayGame() by 1 second
 }
 
-
-    // public void DIALOGUE()
-    // {
-    //     int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
-    //     Debug.Log("Loading next scene: " + nextSceneIndex);
-    //     SceneManager.LoadSceneAsync(nextSceneIndex);
-    // }
 }
