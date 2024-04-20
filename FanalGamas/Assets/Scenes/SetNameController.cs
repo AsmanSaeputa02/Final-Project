@@ -1,34 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
 public class SetNameController : MonoBehaviour
 {
-    public TextMeshProUGUI user_name; // Corrected variable name
-    public TMP_InputField user_inputField; // Corrected variable name
-    public GameObject hideButton; // Button to hide the dialogue box
+    public TMP_InputField user_inputField;
+    public TextMeshProUGUI user_name_text;
+
+    // PlayerPrefs key for storing user_name
+    private string playerNameKey = "PlayerName";
+
+    void Start()
+    {
+        // Load user_name from PlayerPrefs when the game starts
+        LoadUserName();
+    }
 
     public void setName()
     {
-        string inputText = user_inputField.text.Trim(); // Get input text without leading or trailing whitespace
-
-        if (!string.IsNullOrEmpty(inputText)) // Check if input text is not empty or null
+        string inputText = user_inputField.text.Trim();
+        if (!string.IsNullOrEmpty(inputText))
         {
-            user_name.text = inputText;
-            StartCoroutine(ShowHideButtonAfterDelay(1f)); // Start coroutine to show hide button after 1 second
+            // Save user_name to PlayerPrefs
+            PlayerPrefs.SetString(playerNameKey, inputText);
+            // Update user_name_text
+            user_name_text.text = inputText;
+
         }
     }
 
-    IEnumerator ShowHideButtonAfterDelay(float delay)
+    void LoadUserName()
     {
-        yield return new WaitForSeconds(delay); // Wait for specified delay
-        hideButton.SetActive(true); // Show the hide button
-    }
-
-    public void ResetName()
-    {
-        user_name.text = "";
-        hideButton.SetActive(false); // Hide the hide button when resetting the name
+        // Check if user_name exists in PlayerPrefs
+        if (PlayerPrefs.HasKey(playerNameKey))
+        {
+            // Get user_name from PlayerPrefs
+            string playerName = PlayerPrefs.GetString(playerNameKey);
+            // Update user_name_text
+            user_name_text.text = playerName;
+        }
     }
 }

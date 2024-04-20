@@ -21,8 +21,8 @@ public class NewBehaviourScript : MonoBehaviour
         {
             input.x = Input.GetAxisRaw("Horizontal");
             input.y = Input.GetAxisRaw("Vertical");
-            Debug.Log("This is input.x: " + input.x); // Removed extra Debug prefix
-            Debug.Log("This is input.y: " + input.y);
+            // Debug.Log("This is input.x: " + input.x); // Removed extra Debug prefix
+            // Debug.Log("This is input.y: " + input.y);
 
             if (input.x != 0) input.y = 0; // Corrected inequality operator
 
