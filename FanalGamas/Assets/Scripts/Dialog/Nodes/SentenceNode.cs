@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEngine;
+using System.IO;
 
 namespace cherrydev
 {
@@ -20,6 +21,7 @@ namespace cherrydev
 
         private const float lableFieldSpace = 47f;
         private const float textFieldWidth = 100f;
+        private float standartHeight;
 
         private const float externalNodeHeight = 155f;
 
@@ -38,7 +40,27 @@ namespace cherrydev
         /// <returns></returns>
         public string GetSentenceCharacterName()
         {
-            return sentence.characterName;
+            // Check if the file exists
+            string filePath = Path.Combine(Application.persistentDataPath, "Save/savename.txt");
+            if (File.Exists(filePath))
+            {
+                try
+                {
+                    // Read the character name from the file
+                    return File.ReadAllText(filePath);
+                }
+                catch (IOException e)
+                {
+                    Debug.LogError("Error reading character name: " + e.Message);
+                }
+            }
+            else
+            {
+                Debug.LogWarning("Character name file does not exist.");
+            }
+            
+            // Return empty string if file does not exist or error occurs
+            return "";
         }
 
         /// <summary>
@@ -93,7 +115,7 @@ namespace cherrydev
 
             EditorGUILayout.LabelField("Sentence Node", lableStyle);
 
-            DrawCharacterNameFieldHorizontal();
+            // DrawCharacterNameFieldHorizontal();
             DrawSentenceTextFieldHorizontal();
             DrawCharacterSpriteHorizontal();
             DrawExternalFunctionTextField();
@@ -110,13 +132,13 @@ namespace cherrydev
         /// <summary>
         /// Draw label and text fields for char name
         /// </summary>
-        private void DrawCharacterNameFieldHorizontal()
-        {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField($"Name ", GUILayout.Width(lableFieldSpace));
-            sentence.characterName = EditorGUILayout.TextField(sentence.characterName, GUILayout.Width(textFieldWidth));
-            EditorGUILayout.EndHorizontal();
-        }
+        // private void DrawCharacterNameFieldHorizontal()
+        // {
+        //     EditorGUILayout.BeginHorizontal();
+        //     EditorGUILayout.LabelField($"Name ", GUILayout.Width(lableFieldSpace));
+        //     sentence.characterName = EditorGUILayout.TextField(sentence.characterName, GUILayout.Width(textFieldWidth));
+        //     EditorGUILayout.EndHorizontal();
+        // }
 
         /// <summary>
         /// Draw label and text fields for sentence text

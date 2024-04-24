@@ -32,19 +32,28 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-    public void NewGame()
+   public void NewGame()
+{
+    // ลบไฟล์บันทึกเกม (หากมี)
+    string saveGamePath = Application.persistentDataPath + "/Save/savegame.txt";
+    string saveNamePath = Application.persistentDataPath + "/Save/savename.txt";
+    
+    if (File.Exists(saveGamePath))
     {
-        // ลบไฟล์บันทึกเกม (หากมี)
-        string path = Application.persistentDataPath + "/Save/savegame.txt";
-        if (File.Exists(path))
-        {
-            File.Delete(path);
-            Debug.Log("Save file deleted.");
-        }
-        
-        // โหลดซีน "Choose a character" เพื่อเริ่มเกมใหม่
-        SceneManager.LoadScene("Choose a character");
+        File.Delete(saveGamePath);
+        Debug.Log("Savegame file deleted.");
     }
+
+    if (File.Exists(saveNamePath))
+    {
+        File.Delete(saveNamePath);
+        Debug.Log("Savename file deleted.");
+    }
+    
+    // โหลดซีน "Choose a character" เพื่อเริ่มเกมใหม่
+    SceneManager.LoadScene("Choose a character");
+}
+
 
     public void SaveGame()
     {
@@ -62,5 +71,12 @@ public class MainMenu : MonoBehaviour
     public void ExitGame()
     {
         Application.Quit();
+    }
+
+    public void PlayGame()
+    {
+        int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        Debug.Log("Loading next scene: " + nextSceneIndex);
+        SceneManager.LoadSceneAsync(nextSceneIndex);
     }
 }

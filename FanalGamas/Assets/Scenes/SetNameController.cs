@@ -6,6 +6,7 @@ using System.IO;
 
 public class SetNameController : MonoBehaviour
 {
+    public GameObject Recheck; // Reference to your GameObject in the Unity Editor
     public TMP_InputField userInputField;
     public TMP_Text userName;
 
@@ -31,12 +32,29 @@ public class SetNameController : MonoBehaviour
         DeleteSaveFile();
     }
 
-    private void SaveUserName(string name)
+private void SaveUserName(string name)
+{
+    if (string.IsNullOrEmpty(name))
     {
-        string path = Application.persistentDataPath + "/Save/savename.txt";
+        Debug.LogError("No name entered! Please enter a name before saving.");
+        return;
+    }
+
+    string path = Path.Combine(Application.persistentDataPath, "Save", "savename.txt");
+    try
+    {
         File.WriteAllText(path, name);
         Debug.Log("Username saved: " + name);
+
+        // Activate your GameObject here
+        Recheck.SetActive(true);
     }
+    catch (IOException e)
+    {
+        Debug.LogError("Error saving username: " + e.Message);
+    }
+}
+
 
     private void LoadUserName()
     {
