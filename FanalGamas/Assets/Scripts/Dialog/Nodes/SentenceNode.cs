@@ -21,7 +21,7 @@ namespace cherrydev
 
         private const float lableFieldSpace = 47f;
         private const float textFieldWidth = 100f;
-        private float standartHeight;
+        public new float standartHeight;
 
         private const float externalNodeHeight = 155f;
 
@@ -115,7 +115,6 @@ namespace cherrydev
 
             EditorGUILayout.LabelField("Sentence Node", lableStyle);
 
-            // DrawCharacterNameFieldHorizontal();
             DrawSentenceTextFieldHorizontal();
             DrawCharacterSpriteHorizontal();
             DrawExternalFunctionTextField();
@@ -123,22 +122,10 @@ namespace cherrydev
             if (GUILayout.Button(externalButtonLable))
             {
                 isExternalFunc = !isExternalFunc;
-
             }
 
             GUILayout.EndArea();
         }
-
-        /// <summary>
-        /// Draw label and text fields for char name
-        /// </summary>
-        // private void DrawCharacterNameFieldHorizontal()
-        // {
-        //     EditorGUILayout.BeginHorizontal();
-        //     EditorGUILayout.LabelField($"Name ", GUILayout.Width(lableFieldSpace));
-        //     sentence.characterName = EditorGUILayout.TextField(sentence.characterName, GUILayout.Width(textFieldWidth));
-        //     EditorGUILayout.EndHorizontal();
-        // }
 
         /// <summary>
         /// Draw label and text fields for sentence text
