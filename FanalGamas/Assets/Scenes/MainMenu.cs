@@ -37,7 +37,8 @@ public class MainMenu : MonoBehaviour
     // ลบไฟล์บันทึกเกม (หากมี)
     string saveGamePath = Application.persistentDataPath + "/Save/savegame.txt";
     string saveNamePath = Application.persistentDataPath + "/Save/savename.txt";
-    
+
+    PlayerPrefs.DeleteAll();
     if (File.Exists(saveGamePath))
     {
         File.Delete(saveGamePath);
@@ -55,17 +56,27 @@ public class MainMenu : MonoBehaviour
 }
 
 
-    public void SaveGame()
+      public void SaveGame()
     {
         string currentScene = SceneManager.GetActiveScene().name;
-        string path = Application.persistentDataPath + "/Save/savegame.txt";
 
-        // สร้างโฟลเดอร์ Save ถ้ายังไม่มี
-        Directory.CreateDirectory(Application.persistentDataPath + "/Save");
+        // ตรวจสอบว่าซีนปัจจุบันไม่ใช่ "Main Menu"
+        if (currentScene != "Main Menu")
+        {
+            string savePath = Path.Combine(Application.persistentDataPath, "Save", "savegame.txt");
 
-        File.WriteAllText(path, currentScene);
+            // สร้างโฟลเดอร์ Save ถ้ายังไม่มี
+            Directory.CreateDirectory(Path.GetDirectoryName(savePath));
 
-        Debug.Log("Game saved.");
+            // เขียนชื่อซีนปัจจุบันลงในไฟล์
+            File.WriteAllText(savePath, currentScene);
+
+            Debug.Log("Game saved.");
+        }
+        else
+        {
+            Debug.LogWarning("Cannot save in Main Menu.");
+        }
     }
 
     public void ExitGame()
@@ -78,5 +89,10 @@ public class MainMenu : MonoBehaviour
         int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
         Debug.Log("Loading next scene: " + nextSceneIndex);
         SceneManager.LoadSceneAsync(nextSceneIndex);
+    }
+
+        public void Back(string sceneName)
+    {   
+        SceneManager.LoadSceneAsync(sceneName);
     }
 }
