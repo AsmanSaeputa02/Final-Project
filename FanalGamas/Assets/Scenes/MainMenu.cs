@@ -32,28 +32,25 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-   public void NewGame()
-{
-    // ลบไฟล์บันทึกเกม (หากมี)
-    string saveGamePath = Application.persistentDataPath + "/Save/savegame.txt";
-    string saveNamePath = Application.persistentDataPath + "/Save/savename.txt";
-
-    PlayerPrefs.DeleteAll();
-    if (File.Exists(saveGamePath))
+ public void NewGame()
     {
-        File.Delete(saveGamePath);
-        Debug.Log("Savegame file deleted.");
-    }
+        string path = Application.persistentDataPath + "/Save/";
+        PlayerPrefs.DeleteAll();
+        
+        string[] filesToDelete = { "savegame.txt", "savename.txt", "savelevel.txt" };
 
-    if (File.Exists(saveNamePath))
-    {
-        File.Delete(saveNamePath);
-        Debug.Log("Savename file deleted.");
+        foreach (string fileName in filesToDelete)
+        {
+            string filePath = Path.Combine(path, fileName);
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+                Debug.Log(fileName + " file deleted.");
+            }
+        }
+
+        SceneManager.LoadScene("Choose a character");
     }
-    
-    // โหลดซีน "Choose a character" เพื่อเริ่มเกมใหม่
-    SceneManager.LoadScene("Choose a character");
-}
 
 
       public void SaveGame()
