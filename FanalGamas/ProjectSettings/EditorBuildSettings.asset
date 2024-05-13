@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Map/01_Level 01.unity
     guid: b734324e633374081aa2588128d44bc6
   - enabled: 1
+    path: Assets/Scenes/game.unity
+    guid: d4c867b60215b044b8de700122ca6db8
+  - enabled: 1
     path: Assets/Scenes/DemoScene.unity
     guid: 5af012a8b7991a84fb99a854db8dfc21
   - enabled: 1
