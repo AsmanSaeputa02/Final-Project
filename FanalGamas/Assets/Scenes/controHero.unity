@@ -274,6 +274,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: mini simple demo_01
       objectReference: {fileID: 0}
+    - target: {fileID: 8679757490863890365, guid: 6c7f06c6a702d4d41bba4b5576adc82c, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8679757490863890365, guid: 6c7f06c6a702d4d41bba4b5576adc82c, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 32fb728ff63754d48a8d36ac8a98662b, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -371,6 +379,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 23.392, y: 2.166, z: -0.434}
+--- !u!95 &1421716185 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8679757490863890365, guid: 6c7f06c6a702d4d41bba4b5576adc82c, type: 3}
+  m_PrefabInstance: {fileID: 588700071}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1502787986
 GameObject:
   m_ObjectHideFlags: 0
@@ -509,6 +522,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 2087520587}
   speed: 6.5
+  anim: {fileID: 1421716185}
 --- !u!143 &2087520587
 CharacterController:
   m_ObjectHideFlags: 0

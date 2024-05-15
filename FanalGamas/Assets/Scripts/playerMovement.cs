@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private CharacterController controller;
     [SerializeField] private float speed = 10f;
+    [SerializeField] private Animator anim;
 
     private float inputX;
     private float inputY;
@@ -21,8 +22,12 @@ public class PlayerController : MonoBehaviour
         // Move the character controller based on direction and speed
         controller.Move(direction * Time.deltaTime * speed);
 
+        // Set animator parameter "Moving" based on direction magnitude
+        bool isMoving = direction.magnitude > 0.1f;
+        anim.SetBool("Moving", isMoving);
+
         // Rotate the character towards the direction of movement
-        if (direction.magnitude > 0.1f)
+        if (isMoving)
         {
             float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
             Quaternion toRotation = Quaternion.AngleAxis(angle, Vector3.up);
