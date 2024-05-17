@@ -51,5 +51,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "FanalGamas.sln"
+    "dotnet.defaultSolution": "FanalGamas.sln",
+    "FSharp.suggestGitignore": false
 }
