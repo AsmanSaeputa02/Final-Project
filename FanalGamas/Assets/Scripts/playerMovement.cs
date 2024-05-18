@@ -18,11 +18,34 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
     private Transform groundCheck;
 
+    private Vector2 boundaryMin;
+    private Vector2 boundaryMax;
+
     private void Awake()
     {
         groundCheck = new GameObject("GroundCheck").transform;
         groundCheck.SetParent(transform);
         groundCheck.localPosition = Vector3.down * 0.5f;
+
+        // Find the plane in the scene
+        GameObject plane = GameObject.Find("Plane");
+        if (plane != null)
+        {
+            Collider planeCollider = plane.GetComponent<Collider>();
+            if (planeCollider != null)
+            {
+                // Calculate boundaries based on the collider bounds
+                Vector3 planeMin = planeCollider.bounds.min;
+                Vector3 planeMax = planeCollider.bounds.max;
+
+                boundaryMin = new Vector2(planeMin.x, planeMin.z);
+                boundaryMax = new Vector2(planeMax.x, planeMax.z);
+            }
+        }
+        else
+        {
+            Debug.LogError("Plane not found in the scene. Please ensure there is a GameObject named 'Plane' with a Collider.");
+        }
     }
 
     private void Update()
@@ -46,7 +69,21 @@ public class PlayerController : MonoBehaviour
         float currentSpeed = isRunning ? runSpeed : walkSpeed;
 
         // Move the character controller based on direction and current speed
-        controller.Move(direction * Time.deltaTime * currentSpeed);
+        Vector3 move = direction * currentSpeed * Time.deltaTime;
+
+        // Apply gravity
+        velocity.y += gravity * Time.deltaTime;
+        move.y = velocity.y * Time.deltaTime;
+
+        // Calculate the new position
+        Vector3 newPosition = transform.position + move;
+
+        // Clamp the position within boundaries
+        newPosition.x = Mathf.Clamp(newPosition.x, boundaryMin.x, boundaryMax.x);
+        newPosition.z = Mathf.Clamp(newPosition.z, boundaryMin.y, boundaryMax.y);
+
+        // Move the character controller based on clamped position
+        controller.Move(newPosition - transform.position);
 
         // Set animator parameters based on movement and running state
         bool isMoving = direction.magnitude > 0.1f;
@@ -61,9 +98,5 @@ public class PlayerController : MonoBehaviour
             Quaternion toRotation = Quaternion.AngleAxis(angle, Vector3.up);
             transform.rotation = Quaternion.Slerp(transform.rotation, toRotation, Time.deltaTime * 15f);
         }
-
-        // Apply gravity
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
     }
 }
