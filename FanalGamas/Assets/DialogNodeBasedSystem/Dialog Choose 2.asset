@@ -16,8 +16,8 @@ MonoBehaviour:
   nodeGraph: {fileID: 11400000}
   rect:
     serializedVersion: 2
-    x: 710.4
-    y: 38.600098
+    x: 712.7997
+    y: -106.199905
     width: 190
     height: 135
   isDragging: 0
@@ -47,8 +47,8 @@ MonoBehaviour:
   nodeGraph: {fileID: 11400000}
   rect:
     serializedVersion: 2
-    x: 2224.8013
-    y: 592.20026
+    x: 2227.2056
+    y: 447.40012
     width: 190
     height: 135
   isDragging: 0
@@ -78,8 +78,8 @@ MonoBehaviour:
   nodeGraph: {fileID: 11400000}
   rect:
     serializedVersion: 2
-    x: 929.2
-    y: 118.40007
+    x: 1049.1997
+    y: -61.59999
     width: 190
     height: 135
   isDragging: 0
@@ -109,8 +109,8 @@ MonoBehaviour:
   nodeGraph: {fileID: 11400000}
   rect:
     serializedVersion: 2
-    x: 945
-    y: 411.00012
+    x: 966.59955
+    y: 253.40012
     width: 190
     height: 135
   isDragging: 0
@@ -140,8 +140,8 @@ MonoBehaviour:
   nodeGraph: {fileID: 11400000}
   rect:
     serializedVersion: 2
-    x: 707.5999
-    y: 205.80017
+    x: 720.3996
+    y: 58.600067
     width: 190
     height: 135
   isDragging: 0
@@ -171,8 +171,8 @@ MonoBehaviour:
   nodeGraph: {fileID: 11400000}
   rect:
     serializedVersion: 2
-    x: 237.20003
-    y: 261.20013
+    x: 142.79965
+    y: 262.0002
     width: 190
     height: 155
   isDragging: 0
@@ -230,15 +230,15 @@ MonoBehaviour:
   nodeGraph: {fileID: 11400000}
   rect:
     serializedVersion: 2
-    x: 937.60004
-    y: 600.7996
+    x: 969.5998
+    y: 402.39938
     width: 190
     height: 135
   isDragging: 0
   isSelected: 0
   sentence:
     characterName: cherrydev
-    text: Next to fourth sentence
+    text: hhhhhhhhhhh
     characterSprite: {fileID: 21300000, guid: c03d0e70107745d48b9cc5f2abe74fe5, type: 3}
   parentNode: {fileID: 3563645847101711405}
   childNode: {fileID: 4411136173186865135}
@@ -261,8 +261,8 @@ MonoBehaviour:
   nodeGraph: {fileID: 11400000}
   rect:
     serializedVersion: 2
-    x: 1479.001
-    y: 231.2002
+    x: 1589.4023
+    y: 283.2003
     width: 190
     height: 135
   isDragging: 0
@@ -292,15 +292,15 @@ MonoBehaviour:
   nodeGraph: {fileID: 11400000}
   rect:
     serializedVersion: 2
-    x: 720.80005
-    y: 506.19928
+    x: 719.1997
+    y: 348.59946
     width: 190
     height: 135
   isDragging: 0
   isSelected: 0
   sentence:
     characterName: cherrydev
-    text: 5555
+    text: 87878
     characterSprite: {fileID: 21300000, guid: c03d0e70107745d48b9cc5f2abe74fe5, type: 3}
   parentNode: {fileID: 4936782135289953885}
   childNode: {fileID: 548517801765535934}
@@ -323,8 +323,8 @@ MonoBehaviour:
   nodeGraph: {fileID: 11400000}
   rect:
     serializedVersion: 2
-    x: 1208.2002
-    y: 237.40018
+    x: 1306.6011
+    y: 267.0002
     width: 190
     height: 115
   isDragging: 0
@@ -350,10 +350,10 @@ MonoBehaviour:
   nodeGraph: {fileID: 11400000}
   rect:
     serializedVersion: 2
-    x: 459.80002
-    y: 254.20013
+    x: 403.79962
+    y: 238.20029
     width: 190
-    height: 115
+    height: 175
   isDragging: 0
   isSelected: 0
   answers:
@@ -361,12 +361,13 @@ MonoBehaviour:
   - Go to second sentence
   - Go to third sentence
   - Go to fourth sentence
-  - 5555
   parentSentenceNode: {fileID: 0}
   childSentenceNodes:
   - {fileID: -8705819208441359274}
   - {fileID: -5184584624021453599}
   - {fileID: 8776957959574132249}
+  - {fileID: 3563645847101711405}
+  - {fileID: 3563645847101711405}
   - {fileID: 3563645847101711405}
   - {fileID: 3563645847101711405}
 --- !u!114 &4978805031079437192
@@ -385,8 +386,8 @@ MonoBehaviour:
   nodeGraph: {fileID: 11400000}
   rect:
     serializedVersion: 2
-    x: 948.00006
-    y: 262.6002
+    x: 950.3997
+    y: 117.8002
     width: 190
     height: 135
   isDragging: 0
@@ -416,8 +417,8 @@ MonoBehaviour:
   nodeGraph: {fileID: 11400000}
   rect:
     serializedVersion: 2
-    x: 717.80005
-    y: 348.2002
+    x: 720.1997
+    y: 203.40018
     width: 190
     height: 135
   isDragging: 0
