@@ -48,81 +48,55 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-private void Update()
-{
-    // Ground check
-    isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-    if (isGrounded && velocity.y < 0)
+    private void Update()
     {
-        velocity.y = -2f;
-    }
-
-    // Get input from Horizontal and Vertical axes
-    inputX = Input.GetAxis("Horizontal");
-    inputY = Input.GetAxis("Vertical");
-
-    // Create direction vector based on input and normalize it
-    Vector3 direction = new Vector3(inputX, 0f, inputY).normalized;
-
-
-        bool isRunning = false;
-
-        // Check if Shift key is pressed down
-        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
+        // Ground check
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        if (isGrounded && velocity.y < 0)
         {
-            // Toggle running state
-            isRunning = !isRunning;
+            velocity.y = -2f;
         }
 
-        // **Check if Shift key is released AND movement keys are still pressed**
-        if (Input.GetKeyUp(KeyCode.LeftShift) || Input.GetKeyUp(KeyCode.RightShift))
+        // Get input from Horizontal and Vertical axes
+        inputX = Input.GetAxis("Horizontal");
+        inputY = Input.GetAxis("Vertical");
+
+        // Create direction vector based on input and normalize it
+        Vector3 direction = new Vector3(inputX, 0f, inputY).normalized;
+
+        // Determine if the player is running by checking if the Shift key is pressed
+        bool isRunning = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+        float currentSpeed = isRunning ? runSpeed : walkSpeed;
+
+        // Move the character controller based on direction and current speed
+        Vector3 move = direction * currentSpeed * Time.deltaTime;
+
+        // Apply gravity
+        velocity.y += gravity * Time.deltaTime;
+        move.y = velocity.y * Time.deltaTime;
+
+        // Calculate the new position
+        Vector3 newPosition = transform.position + move;
+
+        // Clamp the position within boundaries
+        newPosition.x = Mathf.Clamp(newPosition.x, boundaryMin.x, boundaryMax.x);
+        newPosition.z = Mathf.Clamp(newPosition.z, boundaryMin.y, boundaryMax.y);
+
+        // Move the character controller based on clamped position
+        controller.Move(newPosition - transform.position);
+
+        // Set animator parameters based on movement and running state
+        bool isMoving = direction.magnitude > 0.1f;
+        anim.SetBool("Walk", isMoving && !isRunning);
+        anim.SetBool("Run", isMoving && isRunning);
+        anim.SetBool("Moving", isMoving);
+
+        // Rotate the character towards the direction of movement
+        if (isMoving)
         {
-            // If movement keys are still pressed but Shift is up, stop running
-            if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
-            {
-                isRunning = false;
-            }
+            float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+            Quaternion toRotation = Quaternion.AngleAxis(angle, Vector3.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, toRotation, Time.deltaTime * 15f);
         }
-
-        // ... (Rest of the movement, animation, and rotation code remains the same)
-
-
-
-
-
-
-    // Move the character controller based on direction and current speed
-    float currentSpeed = isRunning ? runSpeed : walkSpeed;
-    Vector3 move = direction * currentSpeed * Time.deltaTime;
-
-    // Apply gravity
-    velocity.y += gravity * Time.deltaTime;
-    move.y = velocity.y * Time.deltaTime;
-
-    // Calculate the new position
-    Vector3 newPosition = transform.position + move;
-
-    // Clamp the position within boundaries
-    newPosition.x = Mathf.Clamp(newPosition.x, boundaryMin.x, boundaryMax.x);
-    newPosition.z = Mathf.Clamp(newPosition.z, boundaryMin.y, boundaryMax.y);
-
-    // Move the character controller based on clamped position
-    controller.Move(newPosition - transform.position);
-
-    // Set animator parameters based on movement and running state
-    bool isMoving = direction.magnitude > 0.1f;
-    anim.SetBool("Walk", isMoving && !isRunning);
-    anim.SetBool("Run", isMoving && isRunning);
-    anim.SetBool("Moving", isMoving);
-
-    // Rotate the character towards the direction of movement
-    if (isMoving)
-    {
-        float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-        Quaternion toRotation = Quaternion.AngleAxis(angle, Vector3.up);
-        transform.rotation = Quaternion.Slerp(transform.rotation, toRotation, Time.deltaTime * 15f);
     }
-}
-
-
 }
