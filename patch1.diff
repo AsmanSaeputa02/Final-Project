@@ -1,0 +1,150 @@
+From f034810b51c3a7a350fb072463491b92529881ad Mon Sep 17 00:00:00 2001
+From: AsmanSaeputa02 <asman.saeputa8888@gmail.com>
+Date: Fri, 24 May 2024 01:48:57 +0700
+Subject: [PATCH] Revert "test"
+
+This reverts commit f8976aeffe3a7b35b20a0be98b9a3d3dda0af451.
+---
+ FanalGamas/Assets/1233.unity                |   2 +-
+ FanalGamas/Assets/Scripts/playerMovement.cs | 100 ++++++++------------
+ 2 files changed, 38 insertions(+), 64 deletions(-)
+
+diff --git a/FanalGamas/Assets/1233.unity b/FanalGamas/Assets/1233.unity
+index 37f43cd..233ec6e 100644
+--- a/FanalGamas/Assets/1233.unity
++++ b/FanalGamas/Assets/1233.unity
+@@ -38,7 +38,7 @@ RenderSettings:
+   m_ReflectionIntensity: 1
+   m_CustomReflection: {fileID: 0}
+   m_Sun: {fileID: 0}
+-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
++  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+   m_UseRadianceAmbientProbe: 0
+ --- !u!157 &3
+ LightmapSettings:
+diff --git a/FanalGamas/Assets/Scripts/playerMovement.cs b/FanalGamas/Assets/Scripts/playerMovement.cs
+index 7d2491f..a996b0f 100644
+--- a/FanalGamas/Assets/Scripts/playerMovement.cs
++++ b/FanalGamas/Assets/Scripts/playerMovement.cs
+@@ -48,81 +48,55 @@ private void Awake()
+         }
+     }
+ 
+-private void Update()
+-{
+-    // Ground check
+-    isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+-    if (isGrounded && velocity.y < 0)
++    private void Update()
+     {
+-        velocity.y = -2f;
+-    }
+-
+-    // Get input from Horizontal and Vertical axes
+-    inputX = Input.GetAxis("Horizontal");
+-    inputY = Input.GetAxis("Vertical");
+-
+-    // Create direction vector based on input and normalize it
+-    Vector3 direction = new Vector3(inputX, 0f, inputY).normalized;
+-
+-
+-        bool isRunning = false;
+-
+-        // Check if Shift key is pressed down
+-        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
++        // Ground check
++        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
++        if (isGrounded && velocity.y < 0)
+         {
+-            // Toggle running state
+-            isRunning = !isRunning;
++            velocity.y = -2f;
+         }
+ 
+-        // **Check if Shift key is released AND movement keys are still pressed**
+-        if (Input.GetKeyUp(KeyCode.LeftShift) || Input.GetKeyUp(KeyCode.RightShift))
+-        {
+-            // If movement keys are still pressed but Shift is up, stop running
+-            if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+-            {
+-                isRunning = false;
+-            }
+-        }
++        // Get input from Horizontal and Vertical axes
++        inputX = Input.GetAxis("Horizontal");
++        inputY = Input.GetAxis("Vertical");
+ 
+-        // ... (Rest of the movement, animation, and rotation code remains the same)
++        // Create direction vector based on input and normalize it
++        Vector3 direction = new Vector3(inputX, 0f, inputY).normalized;
+ 
++        // Determine if the player is running by checking if the Shift key is pressed
++        bool isRunning = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
++        float currentSpeed = isRunning ? runSpeed : walkSpeed;
+ 
++        // Move the character controller based on direction and current speed
++        Vector3 move = direction * currentSpeed * Time.deltaTime;
+ 
++        // Apply gravity
++        velocity.y += gravity * Time.deltaTime;
++        move.y = velocity.y * Time.deltaTime;
+ 
++        // Calculate the new position
++        Vector3 newPosition = transform.position + move;
+ 
++        // Clamp the position within boundaries
++        newPosition.x = Mathf.Clamp(newPosition.x, boundaryMin.x, boundaryMax.x);
++        newPosition.z = Mathf.Clamp(newPosition.z, boundaryMin.y, boundaryMax.y);
+ 
+-    // Move the character controller based on direction and current speed
+-    float currentSpeed = isRunning ? runSpeed : walkSpeed;
+-    Vector3 move = direction * currentSpeed * Time.deltaTime;
++        // Move the character controller based on clamped position
++        controller.Move(newPosition - transform.position);
+ 
+-    // Apply gravity
+-    velocity.y += gravity * Time.deltaTime;
+-    move.y = velocity.y * Time.deltaTime;
++        // Set animator parameters based on movement and running state
++        bool isMoving = direction.magnitude > 0.1f;
++        anim.SetBool("Walk", isMoving && !isRunning);
++        anim.SetBool("Run", isMoving && isRunning);
++        anim.SetBool("Moving", isMoving);
+ 
+-    // Calculate the new position
+-    Vector3 newPosition = transform.position + move;
+-
+-    // Clamp the position within boundaries
+-    newPosition.x = Mathf.Clamp(newPosition.x, boundaryMin.x, boundaryMax.x);
+-    newPosition.z = Mathf.Clamp(newPosition.z, boundaryMin.y, boundaryMax.y);
+-
+-    // Move the character controller based on clamped position
+-    controller.Move(newPosition - transform.position);
+-
+-    // Set animator parameters based on movement and running state
+-    bool isMoving = direction.magnitude > 0.1f;
+-    anim.SetBool("Walk", isMoving && !isRunning);
+-    anim.SetBool("Run", isMoving && isRunning);
+-    anim.SetBool("Moving", isMoving);
+-
+-    // Rotate the character towards the direction of movement
+-    if (isMoving)
+-    {
+-        float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+-        Quaternion toRotation = Quaternion.AngleAxis(angle, Vector3.up);
+-        transform.rotation = Quaternion.Slerp(transform.rotation, toRotation, Time.deltaTime * 15f);
++        // Rotate the character towards the direction of movement
++        if (isMoving)
++        {
++            float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
++            Quaternion toRotation = Quaternion.AngleAxis(angle, Vector3.up);
++            transform.rotation = Quaternion.Slerp(transform.rotation, toRotation, Time.deltaTime * 15f);
++        }
+     }
+ }
+-
+-
+-}
+-- 
+2.43.0.windows.1
+

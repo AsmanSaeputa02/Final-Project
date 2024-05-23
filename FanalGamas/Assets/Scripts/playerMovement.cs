@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,6 +12,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float groundDistance = 0.4f;
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private Animator anim;
+
+    [SerializeField] private float maxEnergy = 100f;
+    [SerializeField] private float energyCostPerSecond = 10f;
+    [SerializeField] private float energyRecoveryRate = 5f;
+    [SerializeField] private Slider staminaBar;
+    private float currentEnergy;
 
     private float inputX;
     private float inputY;
@@ -27,14 +34,12 @@ public class PlayerController : MonoBehaviour
         groundCheck.SetParent(transform);
         groundCheck.localPosition = Vector3.down * 0.5f;
 
-        // Find the plane in the scene
         GameObject plane = GameObject.Find("Plane");
         if (plane != null)
         {
             Collider planeCollider = plane.GetComponent<Collider>();
             if (planeCollider != null)
             {
-                // Calculate boundaries based on the collider bounds
                 Vector3 planeMin = planeCollider.bounds.min;
                 Vector3 planeMax = planeCollider.bounds.max;
 
@@ -48,55 +53,89 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        currentEnergy = maxEnergy;
+        if (staminaBar != null)
+        {
+            staminaBar.maxValue = maxEnergy;
+            staminaBar.value = currentEnergy;
+        }
+        else
+        {
+            Debug.LogError("Stamina Bar is not assigned in the Inspector.");
+        }
+    }
+
     private void Update()
     {
-        // Ground check
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         if (isGrounded && velocity.y < 0)
         {
             velocity.y = -2f;
         }
 
-        // Get input from Horizontal and Vertical axes
         inputX = Input.GetAxis("Horizontal");
         inputY = Input.GetAxis("Vertical");
 
-        // Create direction vector based on input and normalize it
         Vector3 direction = new Vector3(inputX, 0f, inputY).normalized;
 
-        // Determine if the player is running by checking if the Shift key is pressed
-        bool isRunning = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
-        float currentSpeed = isRunning ? runSpeed : walkSpeed;
+        bool runInput = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+        bool canRun = runInput && currentEnergy > 0 && direction.magnitude > 0.1f;
 
-        // Move the character controller based on direction and current speed
-        Vector3 move = direction * currentSpeed * Time.deltaTime;
+        if (canRun)
+        {
+            currentEnergy -= energyCostPerSecond * Time.deltaTime;
+            if (currentEnergy < 0)
+            {
+                currentEnergy = 0;
+            }
+        }
+        else
+        {
+            currentEnergy += energyRecoveryRate * Time.deltaTime;
+            if (currentEnergy > maxEnergy)
+            {
+                currentEnergy = maxEnergy;
+            }
+        }
 
-        // Apply gravity
-        velocity.y += gravity * Time.deltaTime;
-        move.y = velocity.y * Time.deltaTime;
+        staminaBar.value = currentEnergy;
 
-        // Calculate the new position
-        Vector3 newPosition = transform.position + move;
+        float currentSpeed = canRun ? runSpeed : walkSpeed;
 
-        // Clamp the position within boundaries
-        newPosition.x = Mathf.Clamp(newPosition.x, boundaryMin.x, boundaryMax.x);
-        newPosition.z = Mathf.Clamp(newPosition.z, boundaryMin.y, boundaryMax.y);
+        if (direction.magnitude >= 0.1f)
+        {
+            Vector3 move = direction * currentSpeed * Time.deltaTime;
 
-        // Move the character controller based on clamped position
-        controller.Move(newPosition - transform.position);
+            velocity.y += gravity * Time.deltaTime;
+            move.y = velocity.y * Time.deltaTime;
 
-        // Set animator parameters based on movement and running state
+            Vector3 newPosition = transform.position + move;
+
+            newPosition.x = Mathf.Clamp(newPosition.x, boundaryMin.x, boundaryMax.x);
+            newPosition.z = Mathf.Clamp(newPosition.z, boundaryMin.y, boundaryMax.y);
+
+            controller.Move(newPosition - transform.position);
+        }
+
         bool isMoving = direction.magnitude > 0.1f;
-        anim.SetBool("Walk", isMoving && !isRunning);
-        anim.SetBool("Run", isMoving && isRunning);
+
+        // ตั้งค่าพารามิเตอร์ของ Animator
+        anim.SetBool("Walk", isMoving && !canRun);
+        anim.SetBool("Run", isMoving && canRun);
         anim.SetBool("Moving", isMoving);
 
-        // Rotate the character towards the direction of movement
         if (isMoving)
         {
             float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
             Quaternion toRotation = Quaternion.AngleAxis(angle, Vector3.up);
             transform.rotation = Quaternion.Slerp(transform.rotation, toRotation, Time.deltaTime * 15f);
+        }
+        else
+        {
+            // รีเซ็ตความเร็วในกรณีที่ไม่เคลื่อนที่ssasasdasdasdasdas
+            velocity = Vector3.zero;
         }
     }
 }
