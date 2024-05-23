@@ -121,7 +121,11 @@ public class PlayerController : MonoBehaviour
 
         bool isMoving = direction.magnitude > 0.1f;
 
+<<<<<<< HEAD
         // ตั้งค่าพารามิเตอร์ของ Animatoroluหกหหห้้
+=======
+        // ตั้งค่าพารามิเตอร์ของ Animatoroluหกห
+>>>>>>> 4696b61db6ee38fa2703c16eaac28bb3f3b90c63
         anim.SetBool("Walk", isMoving && !canRun);
         anim.SetBool("Run", isMoving && canRun);
         anim.SetBool("Moving", isMoving);
