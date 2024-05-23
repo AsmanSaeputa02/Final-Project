@@ -121,11 +121,7 @@ public class PlayerController : MonoBehaviour
 
         bool isMoving = direction.magnitude > 0.1f;
 
-<<<<<<< HEAD
-        // ตั้งค่าพารามิเตอร์ของ Animatoroluหกหหห้้
-=======
-        // ตั้งค่าพารามิเตอร์ของ Animatoroluหกห
->>>>>>> 4696b61db6ee38fa2703c16eaac28bb3f3b90c63
+        // ตั้งค่าพารามิเตอร์ของ Animator
         anim.SetBool("Walk", isMoving && !canRun);
         anim.SetBool("Run", isMoving && canRun);
         anim.SetBool("Moving", isMoving);
@@ -138,7 +134,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            // รีเซ็ตความเร็วในกรณีที่ไม่เคลื่อนที่ssasasdasdasdasdas
+            // รีเซ็ตความเร็วในกรณีที่ไม่เคลื่อนที่
             velocity = Vector3.zero;
         }
     }
